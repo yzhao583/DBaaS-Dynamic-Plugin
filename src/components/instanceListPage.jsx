@@ -23,7 +23,14 @@ import FlexForm from './form/flexForm'
 import FormBody from './form/formBody'
 import InstanceTable from './instanceTable'
 import InstanceListFilter from './instanceListFilter'
-import { crunchyProviderType, mongoProviderType, crunchyProviderName, mongoProviderName } from '../const'
+import {
+  crunchyProviderType,
+  mongoProviderType,
+  crunchyProviderName,
+  mongoProviderName,
+  adminDashboardType,
+  adminDashboardName,
+} from '../const'
 import { getCSRFToken } from '../utils'
 
 export async function fetchInventoryNamespaces() {
@@ -299,6 +306,9 @@ const InstanceListPage = () => {
     if (dbProviderType === mongoProviderType) {
       setDBProviderName(mongoProviderName)
     }
+    if (dbProviderType === adminDashboardType) {
+      setDBProviderName(adminDashboardName)
+    }
     setSelectedDBProvider(dbProviderType)
   }
 
@@ -358,11 +368,17 @@ const InstanceListPage = () => {
   async function fetchInstances() {
     let inventories = []
     let inventoryItems = await fetchInventoriesByNSAndRules()
+    let filteredInventories = []
 
     if (inventoryItems.length > 0) {
-      let filteredInventories = _.filter(inventoryItems, (inventory) => {
-        return inventory.spec?.providerRef?.name === selectedDBProvider
-      })
+      if (dbProviderName == adminDashboardName) {
+        filteredInventories = inventoryItems
+      } else {
+        filteredInventories = _.filter(inventoryItems, (inventory) => {
+          return inventory.spec?.providerRef?.name === selectedDBProvider
+        })
+      }
+
       filteredInventories.forEach((inventory, index) => {
         let obj = { id: 0, name: '', namespace: '', instances: [], status: {} }
         obj.id = index

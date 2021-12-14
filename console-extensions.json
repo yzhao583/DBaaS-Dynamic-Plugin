@@ -69,11 +69,26 @@
       "exact": true,
       "path": [
         "/k8s/ns/:ns/mongodb-atlas-registration",
-        "/k8s/ns/:ns/crunchy-bridge-registration"
+        "/k8s/ns/:ns/crunchy-bridge-registration",
+        "/k8s/ns/:ns/rhoda-admin-dashboard"
       ],
       "component": {
         "$codeRef": "instanceListPage"
       }
+    }
+  },
+  {
+    "type": "console.navigation/href",
+    "properties": {
+      "id": "rhoda-admin-dashboard",
+      "perspective": "admin",
+      "section": "storage",
+      "name": "RHODA Admin Dashboard",
+      "prefixNamespaced": true,
+      "href": "/rhoda-admin-dashboard"
+    },
+    "flags": {
+      "required": ["OPENSHIFT"]
     }
   }
 ]
